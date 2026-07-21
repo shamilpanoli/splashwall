@@ -3,37 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f0f11">
     
     <!-- Primary Search Engine Meta Tags -->
     <title>SplashWall | Free Premium Wallpapers & Backgrounds</title>
     <meta name="title" content="SplashWall | Free Premium Wallpapers & Backgrounds">
     <meta name="description" content="Discover, browse, and download high-quality wallpapers for desktop and mobile on SplashWall.">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://splashwall.vercel.app/">
 
     <!-- Open Graph / Facebook / WhatsApp Preview Tags -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://splashwall.vercel.app/">
-<meta property="og:title" content="SplashWall | Free Premium Wallpapers">
-<meta property="og:description" content="Discover, browse, and download high-quality wallpapers for desktop and mobile on SplashWall.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SplashWall">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://splashwall.vercel.app/">
+    <meta property="og:title" content="SplashWall | Free Premium Wallpapers">
+    <meta property="og:description" content="Discover, browse, and download high-quality wallpapers for desktop and mobile on SplashWall.">
 
-<!-- Strict Image Tags for WhatsApp -->
-<meta property="og:image" content="https://splashwall.vercel.app/og-image.png">
-<meta property="og:image:secure_url" content="https://splashwall.vercel.app/og-image.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+    <!-- Strict Image Tags for Social Previews (1200x630) -->
+    <meta property="og:image" content="https://splashwall.vercel.app/og-image.png">
+    <meta property="og:image:secure_url" content="https://splashwall.vercel.app/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter Preview Tags -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://splashwall.vercel.app/">
-    <meta property="twitter:title" content="SplashWall | Free Premium Wallpapers">
-    <meta property="twitter:description" content="Discover, browse, and download high-quality wallpapers for desktop and mobile on SplashWall.">
-    <meta property="twitter:image" content="https://splashwall.vercel.app/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://splashwall.vercel.app/">
+    <meta name="twitter:title" content="SplashWall | Free Premium Wallpapers">
+    <meta name="twitter:description" content="Discover, browse, and download high-quality wallpapers for desktop and mobile on SplashWall.">
+    <meta name="twitter:image" content="https://splashwall.vercel.app/og-image.png">
 
-    <!-- Favicon & Sitemap Link -->
+    <!-- Favicon & Sitemap Links -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
 
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Supabase JS Client Module -->
@@ -58,7 +65,23 @@
             z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .logo { font-size: 24px; font-weight: 700; letter-spacing: -1px; cursor: pointer; user-select: none;}
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .site-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo { font-size: 24px; font-weight: 700; letter-spacing: -1px; color: #ffffff; }
         .logo span { color: #3b82f6; }
         
         nav { display: flex; align-items: center; gap: 10px; }
@@ -490,7 +513,10 @@
 
     <!-- Header Navigation Section -->
     <header>
-        <div class="logo" id="logoHome">Splash<span>Wall</span></div>
+        <div class="logo-container" id="logoHome">
+            <img src="/logo.png" alt="SplashWall Logo" class="site-logo" onerror="this.style.display='none'">
+            <div class="logo">Splash<span>Wall</span></div>
+        </div>
         <nav>
             <button class="nav-btn" id="navDownloadsBtn">Downloads</button>
             <button class="nav-btn active" id="homeBtn">Home</button>
@@ -830,9 +856,9 @@
                         matrix[i][j] = matrix[i - 1][j - 1];
                     } else {
                         matrix[i][j] = Math.min(
-                            matrix[i - 1][j - 1] + 1, // substitution
-                            matrix[i][j - 1] + 1,     // insertion
-                            matrix[i - 1][j] + 1      // deletion
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
                         );
                     }
                 }
@@ -845,16 +871,14 @@
             const query = String(queryStr || '').toLowerCase();
 
             if (!query) return true;
-            if (target.includes(query)) return true; // Direct substring match
+            if (target.includes(query)) return true;
 
-            // Break both into individual words for token-level fuzzy testing
             const targetWords = target.split(/\s+/);
             const queryWords = query.split(/\s+/);
 
             return queryWords.every(qWord => {
                 if (qWord.length <= 2) return target.includes(qWord);
                 
-                // Allow 1 typo for short words (3-5 chars), 2 typos for longer words (>5 chars)
                 const maxDistance = qWord.length > 5 ? 2 : 1;
                 
                 return targetWords.some(tWord => {
@@ -1050,7 +1074,6 @@
             if (confirm("Are you sure you want to completely delete this wallpaper image?")) {
                 const target = wallpapers.find(w => w.id === id);
                 
-                // Delete DB Row
                 const { error } = await supabaseClient
                     .from('wallpapers')
                     .delete()
@@ -1059,7 +1082,6 @@
                 if (error) {
                     alert("Error deleting wallpaper: " + error.message);
                 } else {
-                    // Try removing file from storage bucket if possible
                     if (target && target.url) {
                         const path = target.url.split('/wallpapers/').pop();
                         if (path) await supabaseClient.storage.from('wallpapers').remove([path]);
@@ -1082,7 +1104,6 @@
                 const targets = wallpapers.filter(w => selectedWallpaperIds.has(w.id));
 
                 try {
-                    // Delete Database Rows
                     const { error } = await supabaseClient
                         .from('wallpapers')
                         .delete()
@@ -1090,7 +1111,6 @@
 
                     if (error) throw error;
 
-                    // Clean Storage Files
                     const paths = targets.map(t => t.url.split('/wallpapers/').pop()).filter(Boolean);
                     if (paths.length > 0) {
                         await supabaseClient.storage.from('wallpapers').remove(paths);
@@ -1177,15 +1197,11 @@
 
             const filteredItems = wallpapers.filter(item => {
                 const itemCats = item.categories || [];
-                
-                // Category Button Filter Check
                 let matchesCategory = (currentCategory === 'all') || itemCats.includes(currentCategory);
                 
-                // Fuzzy Search Matching across Title, Categories, Quality, and Ratio
                 const combinedSearchableString = `${item.title} ${itemCats.join(' ')} ${item.quality || ''} ${item.ratio || ''}`;
                 const matchesSearch = isFuzzyMatch(combinedSearchableString, searchQuery);
 
-                // Advanced Dropdown Filter Checks
                 const matchesRatio = selectedRatio === 'all' || item.ratio === selectedRatio;
                 const matchesQuality = selectedQuality === 'all' || item.quality === selectedQuality;
                 
@@ -1230,7 +1246,6 @@
                     </div>
                 `;
 
-                // Multi-select Checkbox Event Binding
                 const chk = card.querySelector('.card-select-checkbox');
                 chk.addEventListener('change', (e) => {
                     e.stopPropagation();
@@ -1243,7 +1258,6 @@
                 });
                 chk.addEventListener('click', (e) => e.stopPropagation());
 
-                // Bind preview & edit events
                 card.querySelector('img').addEventListener('click', () => openPreview(item.url, item.title));
                 card.querySelector('.download-icon').addEventListener('click', () => openPreview(item.url, item.title));
                 card.querySelector('.edit-btn').addEventListener('click', (e) => openEditModal(item, e));
@@ -1322,7 +1336,6 @@
         closeLightbox.addEventListener('click', () => lightbox.classList.remove('active'));
         lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
 
-        // Handle Image Upload & Database Registration (Multi-file Support & Session Retention)
         uploadForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const titleInput = document.getElementById('wpTitle').value.trim();
@@ -1343,27 +1356,23 @@
                 const uploadPromises = Array.from(files).map(async (file, index) => {
                     const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${file.name.replace(/\s+/g, '-')}`;
                     
-                    // 1. Upload to Storage
                     const { data: uploadData, error: uploadError } = await supabaseClient.storage
                         .from('wallpapers')
                         .upload(fileName, file);
 
                     if (uploadError) throw uploadError;
 
-                    // 2. Public URL
                     const { data: publicUrlData } = supabaseClient.storage
                         .from('wallpapers')
                         .getPublicUrl(fileName);
 
                     const publicUrl = publicUrlData.publicUrl;
 
-                    // Dynamic Title
                     let finalTitle = titleInput || file.name.replace(/\.[^/.]+$/, "");
                     if (files.length > 1 && titleInput) {
                         finalTitle = `${titleInput} #${index + 1}`;
                     }
 
-                    // 3. Database Entry
                     const { error: dbError } = await supabaseClient
                         .from('wallpapers')
                         .insert([
@@ -1395,7 +1404,6 @@
             }
         });
 
-        // Feedback Modal Controls
         feedbackTriggerBtn.addEventListener('click', () => {
             feedbackModal.classList.add('active');
         });
@@ -1408,7 +1416,6 @@
             if (e.target === feedbackModal) feedbackModal.classList.remove('active');
         });
 
-        // Submit Feedback to Supabase
         feedbackForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('fbEmail').value.trim();
@@ -1460,7 +1467,6 @@
         searchBtn.addEventListener('click', filterAndRenderWallpapers);
         searchInput.addEventListener('keyup', (e) => { if(e.key === 'Enter') filterAndRenderWallpapers(); });
 
-        // Bootstrap Core Execution
         supabaseClient.auth.getSession().then(({ data: { session } }) => {
             if (session) {
                 document.body.classList.add('admin-mode');
