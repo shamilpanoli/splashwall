@@ -120,11 +120,19 @@
         }
         .admin-toggle-btn:hover { background: #ef4444; color: #fff; }
 
-        body.admin-mode .admin-nav-btn { display: inline-block; }
+        .admin-exit-btn {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: none;
+            order: 5;
+        }
+        .admin-exit-btn:hover { background: #f59e0b; color: #fff; }
 
-        /* ==========================================================================
-           HERO DESIGN & SCROLL CONTROLS
-           ========================================================================== */
+        body.admin-mode .admin-nav-btn,
+        body.admin-mode .admin-exit-btn { display: inline-block; }
+
+        /* HERO & SEARCH */
         .hero-wrapper {
             position: relative;
             width: 100%;
@@ -255,11 +263,29 @@
             padding: 8px;
         }
 
-        /* Categories Selectors */
-        .categories { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; position: relative; z-index: 10; }
-        .cat-btn { padding: 8px 20px; border: 1px solid #374151; background: transparent; color: #9ca3af; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
+        /* Categories Selectors & More Toggle */
+        .categories { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; position: relative; z-index: 10; max-width: 1100px; margin-left: auto; margin-right: auto; padding: 0 20px; }
+        .cat-btn { padding: 8px 18px; border: 1px solid #374151; background: transparent; color: #9ca3af; border-radius: 20px; cursor: pointer; transition: all 0.3s; font-size: 13px; font-weight: 600; }
         .cat-btn:hover, .cat-btn.active { background: #fff; color: #000; border-color: #fff; }
-        
+        .more-cat-btn { background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.4); color: #3b82f6; }
+        .more-cat-btn:hover { background: #3b82f6; color: #fff; }
+
+        .more-categories-wrapper {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto 20px auto;
+            padding: 15px 20px;
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px dashed #374151;
+            border-radius: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        .more-categories-wrapper.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
         /* Advanced Filters */
         .advanced-filters { 
             display: flex; 
@@ -361,7 +387,7 @@
         .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%); opacity: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; transition: opacity 0.3s ease; }
         .card:hover .card-overlay { opacity: 1; }
         .card-overlay h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-        .card-specs { display: flex; gap: 8px; font-size: 11px; color: #9ca3af; margin-bottom: 12px; }
+        .card-specs { display: flex; gap: 8px; font-size: 11px; color: #9ca3af; margin-bottom: 12px; flex-wrap: wrap; }
         .card-specs span { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; }
         
         .action-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -489,8 +515,8 @@
             transform: translateY(-2px);
         }
 
-        /* Admin Panels */
-        .admin-panel { max-width: 600px; margin: 0 auto 40px auto; background: #1f2937; padding: 25px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); display: none; border: 1px solid #374151; position: relative; z-index: 20; }
+        /* Admin Panels & Preset Checkboxes */
+        .admin-panel { max-width: 650px; margin: 0 auto 40px auto; background: #1f2937; padding: 25px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); display: none; border: 1px solid #374151; position: relative; z-index: 20; }
         .admin-panel.active { display: block; animation: slideDown 0.3s ease-out; }
         @keyframes slideDown { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
         .admin-panel h2 { font-size: 20px; margin-bottom: 15px; color: #10b981; }
@@ -499,11 +525,16 @@
         .form-group label { font-size: 14px; color: #9ca3af; }
         .form-group input, .form-group select { padding: 12px; background: #111827; border: 1px solid #374151; color: white; border-radius: 6px; outline: none; }
         
-        .multi-cat-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
-        .cat-checkbox-btn, .edit-cat-checkbox-btn { display: none; }
-        .cat-checkbox-label { padding: 6px 14px; border: 1px solid #374151; border-radius: 20px; font-size: 12px; color: #9ca3af; cursor: pointer; transition: all 0.2s; background: #111827; }
-        .cat-checkbox-btn:checked + .cat-checkbox-label, .edit-cat-checkbox-btn:checked + .cat-checkbox-label { background: #10b981; color: white; border-color: #10b981; }
+        .multi-cat-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; max-height: 180px; overflow-y: auto; padding-right: 5px; }
+        .multi-cat-container::-webkit-scrollbar { width: 4px; }
+        .multi-cat-container::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+        .cat-checkbox-btn, .edit-cat-checkbox-btn, .tag-checkbox-btn, .edit-tag-checkbox-btn { display: none; }
+        .cat-checkbox-label, .tag-checkbox-label { padding: 6px 14px; border: 1px solid #374151; border-radius: 20px; font-size: 12px; color: #9ca3af; cursor: pointer; transition: all 0.2s; background: #111827; }
         
+        .cat-checkbox-btn:checked + .cat-checkbox-label, .edit-cat-checkbox-btn:checked + .cat-checkbox-label { background: #10b981; color: white; border-color: #10b981; }
+        .tag-checkbox-btn:checked + .tag-checkbox-label, .edit-tag-checkbox-btn:checked + .tag-checkbox-label { background: #3b82f6; color: white; border-color: #3b82f6; }
+
         .upload-submit-btn { background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; width: 100%; margin-top: 10px; }
         .upload-submit-btn:hover { background: #059669; }
         .upload-submit-btn:disabled { background: #374151; cursor: not-allowed; }
@@ -524,6 +555,7 @@
             <!-- ADMIN SPECIFIC NAV BUTTONS -->
             <button class="nav-btn admin-nav-btn" id="adminUploadBtn">Upload Panel</button>
             <button class="nav-btn admin-toggle-btn" id="adminToggle">Close Panel</button>
+            <button class="nav-btn admin-exit-btn" id="adminExitBtn">Exit Admin</button>
         </nav>
     </header>
 
@@ -534,7 +566,7 @@
             <h1>Stunning Free <br>Wallpapers</h1>
             <p>Premium high-quality backgrounds curated exclusively by the creator.</p>
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search wallpapers (e.g., Nature, Vehicle, Dark)...">
+                <input type="text" id="searchInput" placeholder="Search wallpapers (e.g., Nature, Cyberpunk, 4K)...">
                 <button id="searchBtn">Search</button>
             </div>
         </section>
@@ -551,14 +583,39 @@
                 <input type="text" id="wpTitle" placeholder="e.g., Mystic Mountain Valley">
             </div>
             
+            <!-- CATEGORIES SELECTION -->
             <div class="form-group" style="margin-bottom: 20px;">
-                <label>Categories (Select Multiple, Single, or None)</label>
+                <label>Categories (Multi-Select)</label>
                 <div class="multi-cat-container">
                     <input type="checkbox" id="chk-nature" class="cat-checkbox-btn" value="nature">
                     <label for="chk-nature" class="cat-checkbox-label">Nature</label>
                     
                     <input type="checkbox" id="chk-minimal" class="cat-checkbox-btn" value="minimal">
                     <label for="chk-minimal" class="cat-checkbox-label">Minimal</label>
+
+                    <input type="checkbox" id="chk-amoled" class="cat-checkbox-btn" value="amoled">
+                    <label for="chk-amoled" class="cat-checkbox-label">AMOLED</label>
+
+                    <input type="checkbox" id="chk-gaming" class="cat-checkbox-btn" value="gaming">
+                    <label for="chk-gaming" class="cat-checkbox-label">Gaming</label>
+
+                    <input type="checkbox" id="chk-technology" class="cat-checkbox-btn" value="technology">
+                    <label for="chk-technology" class="cat-checkbox-label">Technology</label>
+
+                    <input type="checkbox" id="chk-city" class="cat-checkbox-btn" value="city">
+                    <label for="chk-city" class="cat-checkbox-label">City</label>
+
+                    <input type="checkbox" id="chk-animals" class="cat-checkbox-btn" value="animals">
+                    <label for="chk-animals" class="cat-checkbox-label">Animals</label>
+
+                    <input type="checkbox" id="chk-aesthetic" class="cat-checkbox-btn" value="aesthetic">
+                    <label for="chk-aesthetic" class="cat-checkbox-label">Aesthetic</label>
+
+                    <input type="checkbox" id="chk-mountains" class="cat-checkbox-btn" value="mountains">
+                    <label for="chk-mountains" class="cat-checkbox-label">Mountains</label>
+
+                    <input type="checkbox" id="chk-scifi" class="cat-checkbox-btn" value="sci-fi">
+                    <label for="chk-scifi" class="cat-checkbox-label">Sci-Fi</label>
                     
                     <input type="checkbox" id="chk-anime" class="cat-checkbox-btn" value="anime">
                     <label for="chk-anime" class="cat-checkbox-label">Anime</label>
@@ -572,6 +629,20 @@
                     <input type="checkbox" id="chk-vehicle" class="cat-checkbox-btn" value="vehicle">
                     <label for="chk-vehicle" class="cat-checkbox-label">Car & Vehicle</label>
                 </div>
+            </div>
+
+            <!-- PRESET TAGS SELECTION -->
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>Preset Tags (Auto-selected based on category or manually select)</label>
+                <div class="multi-cat-container" id="presetTagsContainer">
+                    <!-- Dynamic tag checkboxes generated in JS -->
+                </div>
+            </div>
+
+            <!-- CUSTOM TAGS INPUT -->
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="wpCustomTags">Custom Tags (Comma-separated)</label>
+                <input type="text" id="wpCustomTags" placeholder="e.g., Neon, Sunset Drive, Cyberpunk 2077">
             </div>
 
             <div class="form-row">
@@ -606,7 +677,7 @@
         </form>
     </section>
 
-    <!-- Category Filters Navigation Grid -->
+    <!-- Main Category Filters Navigation Row -->
     <div class="categories">
         <button class="cat-btn active" data-filter="all" id="defaultCatBtn">All</button>
         <button class="cat-btn" data-filter="nature">Nature</button>
@@ -615,6 +686,19 @@
         <button class="cat-btn" data-filter="space">Space</button>
         <button class="cat-btn" data-filter="dark">Dark</button>
         <button class="cat-btn" data-filter="vehicle">Car & Vehicle</button>
+        <button class="cat-btn more-cat-btn" id="moreCatToggleBtn">More ▾</button>
+    </div>
+
+    <!-- Collapsible Extended Categories Drawer -->
+    <div class="more-categories-wrapper" id="moreCategoriesDrawer">
+        <button class="cat-btn" data-filter="amoled">AMOLED</button>
+        <button class="cat-btn" data-filter="gaming">Gaming</button>
+        <button class="cat-btn" data-filter="technology">Technology</button>
+        <button class="cat-btn" data-filter="city">City</button>
+        <button class="cat-btn" data-filter="animals">Animals</button>
+        <button class="cat-btn" data-filter="aesthetic">Aesthetic</button>
+        <button class="cat-btn" data-filter="mountains">Mountains</button>
+        <button class="cat-btn" data-filter="sci-fi">Sci-Fi</button>
     </div>
 
     <!-- Inline Filter Row Elements -->
@@ -703,6 +787,30 @@
                         
                         <input type="checkbox" id="edit-chk-minimal" class="edit-cat-checkbox-btn" value="minimal">
                         <label for="edit-chk-minimal" class="cat-checkbox-label">Minimal</label>
+
+                        <input type="checkbox" id="edit-chk-amoled" class="edit-cat-checkbox-btn" value="amoled">
+                        <label for="edit-chk-amoled" class="cat-checkbox-label">AMOLED</label>
+
+                        <input type="checkbox" id="edit-chk-gaming" class="edit-cat-checkbox-btn" value="gaming">
+                        <label for="edit-chk-gaming" class="cat-checkbox-label">Gaming</label>
+
+                        <input type="checkbox" id="edit-chk-technology" class="edit-cat-checkbox-btn" value="technology">
+                        <label for="edit-chk-technology" class="cat-checkbox-label">Technology</label>
+
+                        <input type="checkbox" id="edit-chk-city" class="edit-cat-checkbox-btn" value="city">
+                        <label for="edit-chk-city" class="cat-checkbox-label">City</label>
+
+                        <input type="checkbox" id="edit-chk-animals" class="edit-cat-checkbox-btn" value="animals">
+                        <label for="edit-chk-animals" class="cat-checkbox-label">Animals</label>
+
+                        <input type="checkbox" id="edit-chk-aesthetic" class="edit-cat-checkbox-btn" value="aesthetic">
+                        <label for="edit-chk-aesthetic" class="cat-checkbox-label">Aesthetic</label>
+
+                        <input type="checkbox" id="edit-chk-mountains" class="edit-cat-checkbox-btn" value="mountains">
+                        <label for="edit-chk-mountains" class="cat-checkbox-label">Mountains</label>
+
+                        <input type="checkbox" id="edit-chk-scifi" class="edit-cat-checkbox-btn" value="sci-fi">
+                        <label for="edit-chk-scifi" class="cat-checkbox-label">Sci-Fi</label>
                         
                         <input type="checkbox" id="edit-chk-anime" class="edit-cat-checkbox-btn" value="anime">
                         <label for="edit-chk-anime" class="cat-checkbox-label">Anime</label>
@@ -793,12 +901,24 @@
         let activeTrackingTitle = '';
         let isTimerRunning = false;
 
+        // PRESET TAG LIST
+        const PRESET_TAGS = [
+            "Forest", "Ocean", "Flowers", "Autumn", "Rain", "Snow", "Galaxy", "Planets", "Nebula", "Stars",
+            "Bikes", "Supercars", "Aircraft", "AI", "Coding", "Cyberpunk", "Circuit", "Robots", "Skylines",
+            "Architecture", "Night City", "Gradient", "Geometric", "Shapes", "Fluid", "Cats", "Dogs", "Birds",
+            "Wolves", "Lions", "Action", "Fantasy", "Cute", "Manga", "Digital Art", "3D", "Painting", "Sketch",
+            "Sunrise", "Sunset", "Lakes", "Waterfalls", "Christmas", "Halloween", "Eid", "Diwali", "New Year"
+        ];
+
         // DOM Element Registry
         const grid = document.getElementById('wallpaperGrid');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
         const catButtons = document.querySelectorAll('.cat-btn');
         const defaultCatBtn = document.getElementById('defaultCatBtn');
+        const moreCatToggleBtn = document.getElementById('moreCatToggleBtn');
+        const moreCategoriesDrawer = document.getElementById('moreCategoriesDrawer');
+
         const ratioFilter = document.getElementById('ratioFilter');
         const qualityFilter = document.getElementById('qualityFilter');
         const lightbox = document.getElementById('lightbox');
@@ -810,12 +930,14 @@
         const logoHome = document.getElementById('logoHome');
         const adminToggle = document.getElementById('adminToggle');
         const adminUploadBtn = document.getElementById('adminUploadBtn');
+        const adminExitBtn = document.getElementById('adminExitBtn');
         const adminPanel = document.getElementById('adminPanel');
         const uploadForm = document.getElementById('uploadForm');
         const submitBtn = document.getElementById('submitBtn');
         const downloadFolderContainer = document.getElementById('downloadFolderContainer');
         const downloadGrid = document.getElementById('downloadGrid');
         const heroSection = document.getElementById('heroSection');
+        const presetTagsContainer = document.getElementById('presetTagsContainer');
 
         // Batch Delete Elements
         const batchActionBar = document.getElementById('batchActionBar');
@@ -834,6 +956,49 @@
         const closeFeedback = document.getElementById('closeFeedback');
         const feedbackForm = document.getElementById('feedbackForm');
         const fbSubmitBtn = document.getElementById('fbSubmitBtn');
+
+        // Render Preset Tag Checkboxes in Admin Upload Panel
+        function initPresetTags() {
+            presetTagsContainer.innerHTML = '';
+            PRESET_TAGS.forEach(tag => {
+                const tagId = `tag-${tag.toLowerCase().replace(/\s+/g, '-')}`;
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = tagId;
+                checkbox.classList.add('tag-checkbox-btn');
+                checkbox.value = tag;
+
+                const label = document.createElement('label');
+                label.htmlFor = tagId;
+                label.classList.add('tag-checkbox-label');
+                label.innerText = tag;
+
+                presetTagsContainer.appendChild(checkbox);
+                presetTagsContainer.appendChild(label);
+            });
+        }
+        initPresetTags();
+
+        // Auto-select corresponding tags when a Category checkbox is toggled
+        document.querySelectorAll('.cat-checkbox-btn').forEach(catCb => {
+            catCb.addEventListener('change', () => {
+                const catVal = catCb.value.toLowerCase();
+                
+                // Map category names to matched tags
+                document.querySelectorAll('.tag-checkbox-btn').forEach(tagCb => {
+                    const tagVal = tagCb.value.toLowerCase();
+                    if (tagVal.includes(catVal) || catVal.includes(tagVal)) {
+                        tagCb.checked = catCb.checked;
+                    }
+                });
+            });
+        });
+
+        // More Categories Toggle
+        moreCatToggleBtn.addEventListener('click', () => {
+            moreCategoriesDrawer.classList.toggle('active');
+            moreCatToggleBtn.innerText = moreCategoriesDrawer.classList.contains('active') ? 'Less ▴' : 'More ▾';
+        });
 
         // Helper: Prevent XSS
         function escapeHtml(str) {
@@ -1057,6 +1222,18 @@
             homeBtn.classList.add('active');
         });
 
+        // EXIT ADMIN MODE / LOGOUT BUTTON HANDLER
+        adminExitBtn.addEventListener('click', async () => {
+            if (confirm("Are you sure you want to exit Admin Mode?")) {
+                await supabaseClient.auth.signOut();
+                document.body.classList.remove('admin-mode');
+                adminPanel.classList.remove('active');
+                adminToggle.style.display = "none";
+                alert("Exited Admin Mode successfully.");
+                location.reload();
+            }
+        });
+
         // Batch UI Updater
         function updateBatchUI() {
             const count = selectedWallpaperIds.size;
@@ -1197,9 +1374,11 @@
 
             const filteredItems = wallpapers.filter(item => {
                 const itemCats = item.categories || [];
+                const itemTags = item.tags || [];
+
                 let matchesCategory = (currentCategory === 'all') || itemCats.includes(currentCategory);
                 
-                const combinedSearchableString = `${item.title} ${itemCats.join(' ')} ${item.quality || ''} ${item.ratio || ''}`;
+                const combinedSearchableString = `${item.title} ${itemCats.join(' ')} ${itemTags.join(' ')} ${item.quality || ''} ${item.ratio || ''}`;
                 const matchesSearch = isFuzzyMatch(combinedSearchableString, searchQuery);
 
                 const matchesRatio = selectedRatio === 'all' || item.ratio === selectedRatio;
@@ -1344,8 +1523,18 @@
             const fileInput = document.getElementById('wpFile');
             const files = fileInput.files;
 
-            const checkedBoxes = document.querySelectorAll('.cat-checkbox-btn:checked');
-            const selectedCategories = Array.from(checkedBoxes).map(box => box.value);
+            const checkedCatBoxes = document.querySelectorAll('.cat-checkbox-btn:checked');
+            const selectedCategories = Array.from(checkedCatBoxes).map(box => box.value);
+
+            // Collect selected preset tags + custom tags
+            const checkedTagBoxes = document.querySelectorAll('.tag-checkbox-btn:checked');
+            const selectedPresetTags = Array.from(checkedTagBoxes).map(box => box.value);
+            
+            const customTagsInput = document.getElementById('wpCustomTags').value.trim();
+            const customTags = customTagsInput ? customTagsInput.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+            // Merge unique tags
+            const allTags = Array.from(new Set([...selectedPresetTags, ...customTags]));
 
             if (!files || files.length === 0) return;
 
@@ -1378,7 +1567,8 @@
                         .insert([
                             { 
                                 title: finalTitle, 
-                                categories: selectedCategories, 
+                                categories: selectedCategories,
+                                tags: allTags,
                                 ratio: ratio, 
                                 quality: quality, 
                                 url: publicUrl 
@@ -1391,7 +1581,7 @@
                 await Promise.all(uploadPromises);
 
                 uploadForm.reset();
-                document.querySelectorAll('.cat-checkbox-btn').forEach(box => box.checked = false);
+                document.querySelectorAll('.cat-checkbox-btn, .tag-checkbox-btn').forEach(box => box.checked = false);
                 alert(`Successfully published ${files.length} wallpaper(s)!`);
                 
                 loadWallpapers();
@@ -1444,16 +1634,19 @@
             }
         });
 
-        catButtons.forEach(button => {
+        // Category Filter Button Binding (Main row + More drawer)
+        document.querySelectorAll('.cat-btn').forEach(button => {
+            if (button.id === 'moreCatToggleBtn') return;
+
             button.addEventListener('click', (e) => {
                 const targetFilter = e.target.getAttribute('data-filter');
                 
                 if (e.target.classList.contains('active') && targetFilter !== 'all') {
-                    catButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
                     defaultCatBtn.classList.add('active');
                     currentCategory = 'all';
                 } else {
-                    catButtons.forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
                     currentCategory = targetFilter;
                 }
